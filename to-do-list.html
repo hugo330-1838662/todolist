@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html>
+<body>
+    <div>
+        <p>To-Do List</p>
+        <div id='day-list'>
+            <!-- <form method='GET'>  -->
+                <!-- <button id='monday' formaction='/single-day/monday'>Monday</button>
+                <button id='tuesday' formaction='/single-day/tuesday'>Tuesday</button>
+                <button id='wednesday' formaction='/single-day/wednesday'>Wednesday</button>
+                <button id='thursday' formaction='/single-day/thursday'>Thursday</button>
+                <button id='friday' formaction='/single-day/friday'>Friday</button>
+                <button id='saturday' formaction='/single-day/saturday'>Saturday</button>
+                <button id='sunday' formaction='/single-day/sunday'>Sunday</button> -->
+            <button id='monday'>Monday</button>
+            <button id='tuesday'>Tuesday</button>
+            <button id='wednesday'>Wednesday</button>
+            <button id='thursday'>Thursday</button>
+            <button id='friday'>Friday</button>
+            <button id='saturday'>Saturday</button>
+            <button id='sunday'>Sunday</button>
+            <button id='all_week'>All Week</button>
+            <!-- </form> -->
+        </div>
+        <div id='to-do-list'>
+            <p>[To be populated]</p>
+        </div>
+        <div id='add-item'>
+            <form action='/addItem' method='POST'>
+            <fieldset>
+                <legend>Add to your to-do list</legend>
+                <label for='Day-of-the-week'>To-do on: </label>
+                <select id='week_days' name='day'>
+                    <option value='monday'>Monday</option>
+                    <option value='tuesday'>Tuesday</option>
+                    <option value='wednesday'>Wednesday</option>
+                    <option value='thursday'>Thursday</option>
+                    <option value='friday'>Friday</option>
+                    <option value='saturday'>Saturday</option>
+                    <option value='sunday'>Sunday</option>
+                </select>
+                <br> <br>
+                <label for='Time-of-day'>Time: </label>
+                <select id='time' name='time'>
+                    <option value='none' selected disabled>Select an Option</option>
+                    <option value='00'>12am</option>
+                    <option value='01'>1am</option>
+                    <option value='02'>2am</option>
+                    <option value='03'>3am</option>
+                    <option value='04'>4am</option>
+                    <option value='05'>5am</option>
+                    <option value='06'>6am</option>
+                    <option value='07'>7am</option>
+                    <option value='08'>8am</option>
+                    <option value='09'>9am</option>
+                    <option value='10'>10am</option>
+                    <option value='11'>11am</option>
+                    <option value='12'>12pm</option>
+                    <option value='13'>1pm</option>
+                    <option value='14'>2pm</option>
+                    <option value='15'>3pm</option>
+                    <option value='16'>4pm</option>
+                    <option value='17'>5pm</option>
+                    <option value='18'>6pm</option>
+                    <option value='19'>7pm</option>
+                    <option value='20'>8pm</option>
+                    <option value='21'>9pm</option>
+                    <option value='22'>10pm</option>
+                    <option value='23'>11pm</option>
+                </select>
+                <br><br>
+                <label for='tdtask'>Task to-do: </label>
+                <input id='task' type='text' name='task'>
+                <br /> <br />
+                <label for='note'>Note: </label>
+                <input id='note' type='text' name='note'>
+                <br><br>
+                <input type='submit' value='Submit'>
+                
+            </fieldset>
+                
+            </form>
+        </div>
+
+    </div>
+
+    <script>
+        const GET_LIST_URL = 'single-day/'
+
+        // window.addEventListener("load", init);
+        
+        // function init() {
+        //     document.getElementById('monday').addEventListener('click', clickFunction);
+        //     console.log('initialized')
+        // }
+        
+        // for (child in id('day-list').childNodes) {
+        //     console.log(child)
+        //     //child.addEventListener('click', clickFunction);
+        // }
+        id('monday').addEventListener('click', clickFunction);
+        id('tuesday').addEventListener('click', clickFunction);
+        id('wednesday').addEventListener('click', clickFunction);
+        id('thursday').addEventListener('click', clickFunction);
+        id('friday').addEventListener('click', clickFunction);
+        id('saturday').addEventListener('click', clickFunction);
+        id('sunday').addEventListener('click', clickFunction);
+        id('all_week').addEventListener('click', clickFunction);
+
+        
+        // function(this) {
+        //     removeCurrentList();
+        //     console.log('clicked');
+        //     getToDoList();
+        // });
+        
+        async function wait(el) {
+            await new Promise(resolve => setTimeout(resolve, 0));
+            return el;
+        }
+        
+        function clickFunction() {
+            removeCurrentList();
+            wait(this).then(getToDoList);
+            
+        }
+        function getToDoList(el) {
+            let url = GET_LIST_URL + el.textContent; // if no params needed in request url
+            fetch(url)
+            .then(checkStatus)
+            .then(function(res) {
+                let tdlist = document.createElement('p');
+                tdlist.textContent = res;
+                id('to-do-list').appendChild(tdlist);
+            })
+            .catch(console.log);
+            
+        }
+
+        function removeCurrentList() {
+            while(id('to-do-list').firstChild) {
+                id('to-do-list').removeChild(id('to-do-list').firstChild);
+            }
+
+        }
+        
+// Helper functions.
+        function id(name) {
+            return document.getElementById(name);
+        }
+
+        function checkStatus(response) {
+            if (response.status >= 200 && response.status < 300 || response.status == 0) {
+            return response.text();
+            } else {
+            return Promise.reject(new Error(response.status + ": " + response.statusText));
+            }
+        }
+    </script>
+</body>
+    
+</html>
