@@ -11,7 +11,7 @@ const PORT = process.env.PORT || 3000;
 const http = require('http');
 const Koa = require('koa');
 const Router = require('@koa/router');
-const render = require('koa-ejs');
+// const render = require('koa-ejs');
 const path = require('path');
 const serve = require('koa-static');    // serves static files.
 const koaBody = require('koa-body');
@@ -19,7 +19,14 @@ const koaBody = require('koa-body');
 const router = new Router();
 const app = new Koa();
 
+// paths to directories.
 const staticDirPath = path.join(__dirname, 'public');
+const modelDirPath = path.join(__dirname, 'models');
+
+// create models
+const User = require(path.join(modelDirPath, 'User.js'))(sequelize, DataTypes);
+const Task = require(path.join(modelDirPath, 'Task.js'))(sequelize, DataTypes);
+const Weekday = require(path.join(modelDirPath, 'Weekday.js'))(sequelize, DataTypes);
 
 // app.use(async (ctx, next) => {
 //     try {
@@ -66,12 +73,22 @@ async function init() {
         await sequelize.authenticate();
         console.log('Connection has been established successfully.');
     } catch (err) {
-        console.log('Unable to connect to database:', err);
+        console.error('Unable to connect to database:', err);
     }
     http.createServer(app.callback()).listen(PORT, () => {
         console.log('server ready.')
     });
     
+    try {
+        await Promise.all[
+            User.sync({alter: true}),
+            Task.sync({alter: true})
+        ];
+        
+        console.log('The table for User has been (re)created.');
+    } catch (err) {
+        console.error(err.message);
+    }
 }
 
 init();
