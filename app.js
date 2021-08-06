@@ -39,7 +39,7 @@ const Weekday = require(path.join(modelDirPath, 'Weekday.js'))(sequelize, DataTy
 // });
 
 app.on('error', (err, ctx) => {
-    log.error('server error', err, ctx);
+    console.error('server error', err, ctx);
 });
 
 // router.get('error', '/error', (ctx) => {
@@ -53,23 +53,19 @@ router.get('index', '/', (ctx) => {
     ctx.redirect('/index.html');
 });
 
-router.get('singleDayTask', '/single-day/:day', (ctx) => {
-    ctx.body = 'To-do list for ' + ctx.params.day + '.';
+router.get('singleDayTask', '/single-day/:day', async (ctx) => {
+    // ctx.body = 'To-do list for ' + ctx.params.day + '.';
     // getTask(ctx);
+    let res;
     if (ctx.params.day == -1) {
-        Task.findAll({ attributes: ['dayId', ['taskName', 'Task Name']]})
-            .then((res) => {
-                console.log(JSON.stringify(res));
-            });
+        res = await Task.findAll({ attributes: ['dayId', 'taskName']});
     } else {
-        Task.findAll({
-            attributes: [['taskName', 'Task Name']],
-            where: { dayId: ctx.params.day}
-        })
-            .then((res) => {
-                console.log(JSON.stringify(res));
-            });
+        res = await Task.findAll({
+            attributes: ['taskName'],
+            where: { dayId: ctx.params.day }
+        });
     }
+    ctx.body = res;
 });
 
 // async function getTask(ctx) {
@@ -126,6 +122,7 @@ async function init() {
         await User.sync({alter: true});
         await Weekday.sync({alter: true});
         await Task.sync({alter: true});
+        
         // await User.sync({force: true});
         // await Weekday.sync({force: true});
         // await Task.sync({force: true});
@@ -138,13 +135,13 @@ async function init() {
 
     try {
         await Promise.all([
-            Weekday.findOrCreate({ where: { [Op.and]: [{id: 1}, {name: 'Monday'}] }, attributes: ['id'] }),
-            Weekday.findOrCreate({ where: { [Op.and]: [{id: 2}, {name: 'Tuesday'}] }, attributes: ['id'] }),
-            Weekday.findOrCreate({ where: { [Op.and]: [{id: 3}, {name: 'Wednesday'}] }, attributes: ['id'] }),
-            Weekday.findOrCreate({ where: { [Op.and]: [{id: 4}, {name: 'Thursday'}] }, attributes: ['id'] }),
-            Weekday.findOrCreate({ where: { [Op.and]: [{id: 5}, {name: 'Friday'}] }, attributes: ['id'] }),
-            Weekday.findOrCreate({ where: { [Op.and]: [{id: 6}, {name: 'Saturday'}] }, attributes: ['id'] }),
-            Weekday.findOrCreate({ where: { [Op.and]: [{id: 7}, {name: 'Sunday'}] }, attributes: ['id'] })
+            Weekday.findOrCreate({ where: { id:1 }, defaults: { id: 1, name: 'Monday' } }),
+            Weekday.findOrCreate({ where: { id: 2}, defaults: { id: 2, name: 'Tuesday' } }),
+            Weekday.findOrCreate({ where: { id: 3}, defaults: { id: 3, name: 'Wednesday' } }),
+            Weekday.findOrCreate({ where: { id: 4}, defaults: { id: 4, name: 'Thursday' } }),
+            Weekday.findOrCreate({ where: { id: 5}, defaults: { id: 5, name: 'Friday' } }),
+            Weekday.findOrCreate({ where: { id: 6}, defaults: { id: 6, name: 'Saturday' } }),
+            Weekday.findOrCreate({ where: { id: 7}, defaults: { id: 7, name: 'Sunday' } })
         ]);
     } catch (err) {
         console.error(err.message);

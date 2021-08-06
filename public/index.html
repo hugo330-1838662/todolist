@@ -23,7 +23,7 @@
             <!-- </form> -->
         </div>
         <div id='to-do-list'>
-            <p>[To be populated]</p>
+            <p>Click one of the buttons above.</p>
         </div>
         <div id='add-item'>
             <form action='/addItem' method='POST'>
@@ -98,10 +98,11 @@
                     <option value=21>9pm</option>
                     <option value=22>10pm</option>
                     <option value=23>11pm</option>
+                    <option value=-1>All Day</option>
                 </select>
                 <br><br>
                 <label for='tdtask'>Task to-do: </label>
-                <input id='task' type='text' name='task'>
+                <input id='task' type='text' name='task' required>
                 <br /> <br />
                 <label for='note'>Note: </label>
                 <input id='note' type='text' name='note'>
@@ -152,7 +153,8 @@
         
         function clickFunction() {
             removeCurrentList();
-            wait(this).then(getToDoList);
+            // wait(this).then(getToDoList);
+            getToDoList(this);
             
         }
         function getToDoList(el) {
@@ -160,9 +162,17 @@
             let url = GET_LIST_URL + el.value;
             fetch(url)
             .then(checkStatus)
-            .then(function(res) {
-                let tdlist = document.createElement('p');
-                tdlist.textContent = res;
+            .then(JSON.parse)
+            .then( (res) => {
+                const tdlist = document.createElement('ul');
+                for (task of res) {
+                    console.log(task);
+                    let t = document.createElement('li');
+                    t.textContent = task.taskName;
+                    tdlist.appendChild(t);
+                }
+                // let tdlist = document.createElement('p');
+                // tdlist.textContent = res;
                 id('to-do-list').appendChild(tdlist);
             })
             .catch(console.log);

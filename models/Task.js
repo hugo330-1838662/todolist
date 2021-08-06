@@ -32,7 +32,8 @@ module.exports = (sequelize, DataTypes) => {
         }
     }, {
         timestamps: true, 
-        createdAt: false
+        createdAt: false,
+        raw: true
         // other options
     })
 };
