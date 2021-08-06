@@ -12,14 +12,14 @@
                 <button id='friday' formaction='/single-day/friday'>Friday</button>
                 <button id='saturday' formaction='/single-day/saturday'>Saturday</button>
                 <button id='sunday' formaction='/single-day/sunday'>Sunday</button> -->
-            <button id='monday'>Monday</button>
-            <button id='tuesday'>Tuesday</button>
-            <button id='wednesday'>Wednesday</button>
-            <button id='thursday'>Thursday</button>
-            <button id='friday'>Friday</button>
-            <button id='saturday'>Saturday</button>
-            <button id='sunday'>Sunday</button>
-            <button id='all_week'>All Week</button>
+            <button id='monday' value=1>Monday</button>
+            <button id='tuesday' value=2>Tuesday</button>
+            <button id='wednesday' value=3>Wednesday</button>
+            <button id='thursday' value=4>Thursday</button>
+            <button id='friday' value=5>Friday</button>
+            <button id='saturday' value=6>Saturday</button>
+            <button id='sunday' value=7>Sunday</button>
+            <button id='all_week' value=-1>All Week</button>
             <!-- </form> -->
         </div>
         <div id='to-do-list'>
@@ -31,19 +31,26 @@
                 <legend>Add to your to-do list</legend>
                 <label for='Day-of-the-week'>To-do on: </label>
                 <select id='week_days' name='day'>
-                    <option value='monday'>Monday</option>
+                    <!-- <option value='monday'>Monday</option>
                     <option value='tuesday'>Tuesday</option>
                     <option value='wednesday'>Wednesday</option>
                     <option value='thursday'>Thursday</option>
                     <option value='friday'>Friday</option>
                     <option value='saturday'>Saturday</option>
-                    <option value='sunday'>Sunday</option>
+                    <option value='sunday'>Sunday</option> -->
+                    <option value=1>Monday</option>
+                    <option value=2>Tuesday</option>
+                    <option value=3>Wednesday</option>
+                    <option value=4>Thursday</option>
+                    <option value=5>Friday</option>
+                    <option value=6>Saturday</option>
+                    <option value=7>Sunday</option>
                 </select>
                 <br> <br>
                 <label for='Time-of-day'>Time: </label>
                 <select id='time' name='time'>
                     <option value='none' selected disabled>Select an Option</option>
-                    <option value='00'>12am</option>
+                    <!-- <option value='00'>12am</option>
                     <option value='01'>1am</option>
                     <option value='02'>2am</option>
                     <option value='03'>3am</option>
@@ -66,7 +73,31 @@
                     <option value='20'>8pm</option>
                     <option value='21'>9pm</option>
                     <option value='22'>10pm</option>
-                    <option value='23'>11pm</option>
+                    <option value='23'>11pm</option> -->
+                    <option value=1>12am</option>
+                    <option value=2>1am</option>
+                    <option value=3>2am</option>
+                    <option value=3>3am</option>
+                    <option value=4>4am</option>
+                    <option value=5>5am</option>
+                    <option value=6>6am</option>
+                    <option value=7>7am</option>
+                    <option value=8>8am</option>
+                    <option value=9>9am</option>
+                    <option value=10>10am</option>
+                    <option value=11>11am</option>
+                    <option value=12>12pm</option>
+                    <option value=13>1pm</option>
+                    <option value=14>2pm</option>
+                    <option value=15>3pm</option>
+                    <option value=16>4pm</option>
+                    <option value=17>5pm</option>
+                    <option value=18>6pm</option>
+                    <option value=19>7pm</option>
+                    <option value=20>8pm</option>
+                    <option value=21>9pm</option>
+                    <option value=22>10pm</option>
+                    <option value=23>11pm</option>
                 </select>
                 <br><br>
                 <label for='tdtask'>Task to-do: </label>
@@ -125,7 +156,8 @@
             
         }
         function getToDoList(el) {
-            let url = GET_LIST_URL + el.textContent; // if no params needed in request url
+            //let url = GET_LIST_URL + el.textContent; // if no params needed in request url
+            let url = GET_LIST_URL + el.value;
             fetch(url)
             .then(checkStatus)
             .then(function(res) {

@@ -8,14 +8,15 @@ module.exports = (sequelize, DataTypes) => {
             primaryKey: true,
             autoIncrement: true
         },
-        name: {
+        taskName: {
             type: DataTypes.STRING(25), 
             allowNull: false
         }, 
-        dayId: {
-            type: DataTypes.INTEGER,
-            allowNull: false,
-        },
+        // dayId: {
+        //     type: DataTypes.INTEGER,
+        //     allowNull: false,
+        //     foreignKey: true
+        // },
         time: {
             type: DataTypes.INTEGER,
             allowNull: true
@@ -23,6 +24,11 @@ module.exports = (sequelize, DataTypes) => {
         note: {
             type: DataTypes.TEXT,
             allowNull: true
+        },
+        complete: {
+            type: DataTypes.BOOLEAN,
+            allowNull: false,
+            defaultValue: false
         }
     }, {
         timestamps: true, 
