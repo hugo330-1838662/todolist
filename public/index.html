@@ -117,7 +117,8 @@
     </div>
 
     <script>
-        const GET_LIST_URL = 'single-day/'
+        const GET_LIST_URL = 'getTask/';
+        const COMPLETE_TASK_URL = 'complete/';
 
         // window.addEventListener("load", init);
         
@@ -157,6 +158,24 @@
             getToDoList(this);
             
         }
+
+        function deleteTask() {
+            
+        }
+
+        function completeTask() {
+            let url = COMPLETE_TASK_URL; // + this.closest('li').id;
+            // console.log(JSON.stringify({ 'taskID': this.closest('li').id }));
+            // console.log(this.closest('li').id);
+            fetch(url, {
+                method: 'POST',
+                headers: { 'Content-Type' : 'application/json'},
+                body: JSON.stringify({ "taskId": this.closest('li').id })
+            })
+            .catch(console.err);
+            
+        }
+
         function getToDoList(el) {
             //let url = GET_LIST_URL + el.textContent; // if no params needed in request url
             let url = GET_LIST_URL + el.value;
@@ -164,12 +183,33 @@
             .then(checkStatus)
             .then(JSON.parse)
             .then( (res) => {
+                // console.log(res);
                 const tdlist = document.createElement('ul');
                 for (task of res) {
-                    console.log(task);
-                    let t = document.createElement('li');
-                    t.textContent = task.taskName;
-                    tdlist.appendChild(t);
+                    const taskBox = document.createElement('li');
+                    const name = document.createElement('div');
+                    const note = document.createElement('div');
+                    const dButton = document.createElement('button')
+                    const cButton = document.createElement('button');
+                    taskBox.classList.add('card');
+                    taskBox.id = task.taskId;
+                    name.textContent = task.taskName;
+                    note.textContent = 'Note: ' + task.note;
+                    note.classList.add('note');
+                    if (task.complete) {
+                        taskBox.classList.add('completed');
+                    }
+                    dButton.textContent = 'Delete Task';
+                    cButton.textContent = 'Mark As Complete';
+                    dButton.classList.add('taskButton');
+                    cButton.classList.add('taskButton');
+                    dButton.addEventListener('click', deleteTask);
+                    cButton.addEventListener('click', completeTask);
+                    taskBox.appendChild(name);
+                    taskBox.appendChild(note);
+                    taskBox.appendChild(cButton);
+                    taskBox.appendChild(dButton);
+                    tdlist.appendChild(taskBox);
                 }
                 // let tdlist = document.createElement('p');
                 // tdlist.textContent = res;

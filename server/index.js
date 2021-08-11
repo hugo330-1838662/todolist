@@ -53,15 +53,15 @@ router.get('index', '/', (ctx) => {
     ctx.redirect('/index.html');
 });
 
-router.get('singleDayTask', '/single-day/:day', async (ctx) => {
+router.get('getTask', '/getTask/:day', async (ctx) => {
     // ctx.body = 'To-do list for ' + ctx.params.day + '.';
     // getTask(ctx);
     let res;
     if (ctx.params.day == -1) {
-        res = await Task.findAll({ attributes: ['dayId', 'taskName']});
+        res = await Task.findAll({ attributes: [['id', 'taskId'], 'dayId', 'taskName', 'note', 'complete']});
     } else {
         res = await Task.findAll({
-            attributes: ['taskName'],
+            attributes: [['id', 'taskId'], 'dayId', 'taskName', 'note', 'complete'],
             where: { dayId: ctx.params.day }
         });
     }
@@ -79,13 +79,19 @@ router.get('singleDayTask', '/single-day/:day', async (ctx) => {
 //     }
 // }
 
+router.delete('deleteTask', '/deleteTask', (ctx) => {
+    // add validation here.
+    const bdy = ctx.request.body;
+    console.log(bdy);
+});
+
+// Add tasks to the model
 router.post('addTask', '/addItem', (ctx) => {
     const bdy = ctx.request.body;
     console.log(bdy);
     if (!bdy.time) {
         bdy.time = '-1';
     }
-    console.log(bdy);
     Task.create({
          taskName: bdy.task,
          time: bdy.time,
@@ -93,8 +99,25 @@ router.post('addTask', '/addItem', (ctx) => {
          note: bdy.note
     }).then(() => {
         console.log('success!')
-    }).then(ctx.redirect('/'));
+    }).then(ctx.redirect('/'))
+    .catch(console.log);
 });
+
+
+// Update the 'complete' attribute on the Task model
+router.post('markComplete', '/complete', (ctx) => {
+    const bdy = ctx.request.body;
+    console.log(bdy);
+    Task.update({ complete: 1 }, { where: {
+        id: bdy.taskId
+    } }).then(() => {
+        console.log('Successfully marked task with id=', bdy.taskId, 'as complete');
+    }).then(ctx.redirect('/'))
+    .catch(console.log);
+    
+    // Task.update({ complete: 1 }, { where: { id: ctx.request.body.taskId }});
+});
+
 
 app
     .use(serve(staticDirPath))
