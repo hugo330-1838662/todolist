@@ -77,6 +77,8 @@ function getToDoList() {
             cButton.classList.add('taskButton');
             if (task.complete) {
                 taskBox.classList.add('completed');
+            } else {
+                taskBox.classList.remove('completed');
             }
             taskBox.id = task.id;
             name.textContent = 'Task Name: ' + task.taskName;

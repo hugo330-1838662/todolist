@@ -1,8 +1,15 @@
 body {
     width: 80%;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    padding-left: 10px;
     margin: auto;
-    font-family: Helvetica, sans-serif;
-    background-color: beige;
+    font-family: Monospace;
+    background-color: whitesmoke;
+}
+
+html {
+    background-color: white;
 }
 
 
@@ -13,18 +20,20 @@ body {
     margin: 10px;
     justify-content: space-around;
     align-items: center;
-    background-color: antiquewhite;
+    background-color: beige;
     padding: 10px;
-    font-family: monospace;
+    /* font-family: monospace; */
 }
 
 button {
-    width: 40%;
-    height: 60px;
+    /* width: 40%;
+    height: 60px; */
     background-color: white;
     border: solid black 2pt;
+    border-radius: 10px;
     font-size: 12pt;
-    margin: 10px
+    margin: 5px;
+    font-family: monospace;
 }
 
 ul {
@@ -34,4 +43,17 @@ ul {
 
 .task-list {
     display: block;
+}
+
+.completed {
+    color: gray;
+    background-color: darkgray;
+}
+
+.card > div {
+    margin: 5px;
+}
+
+#submit-button {
+    font-family: monospace;
 }
