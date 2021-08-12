@@ -59,7 +59,8 @@ router.get('getTask', '/getTask', async (ctx) => {
     ctx.body = await Task.findAll({
         order: [
             ['complete', 'ASC'],
-            ['dueDate', 'ASC']
+            ['dueDate', 'ASC'],
+            ['dueTime', 'ASC']
         ]
     });
 })
