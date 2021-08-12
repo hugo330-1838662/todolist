@@ -1,244 +1,51 @@
 <!DOCTYPE html>
-<html>
-<body>
-    <div>
-        <p>To-Do List</p>
-        <div id='day-list'>
-            <!-- <form method='GET'>  -->
-                <!-- <button id='monday' formaction='/single-day/monday'>Monday</button>
-                <button id='tuesday' formaction='/single-day/tuesday'>Tuesday</button>
-                <button id='wednesday' formaction='/single-day/wednesday'>Wednesday</button>
-                <button id='thursday' formaction='/single-day/thursday'>Thursday</button>
-                <button id='friday' formaction='/single-day/friday'>Friday</button>
-                <button id='saturday' formaction='/single-day/saturday'>Saturday</button>
-                <button id='sunday' formaction='/single-day/sunday'>Sunday</button> -->
-            <button id='monday' value=1>Monday</button>
-            <button id='tuesday' value=2>Tuesday</button>
-            <button id='wednesday' value=3>Wednesday</button>
-            <button id='thursday' value=4>Thursday</button>
-            <button id='friday' value=5>Friday</button>
-            <button id='saturday' value=6>Saturday</button>
-            <button id='sunday' value=7>Sunday</button>
-            <button id='all_week' value=-1>All Week</button>
-            <!-- </form> -->
-        </div>
-        <div id='to-do-list'>
-            <p>Click one of the buttons above.</p>
-        </div>
-        <div id='add-item'>
-            <form action='/addItem' method='POST'>
-            <fieldset>
-                <legend>Add to your to-do list</legend>
-                <label for='Day-of-the-week'>To-do on: </label>
-                <select id='week_days' name='day'>
-                    <!-- <option value='monday'>Monday</option>
-                    <option value='tuesday'>Tuesday</option>
-                    <option value='wednesday'>Wednesday</option>
-                    <option value='thursday'>Thursday</option>
-                    <option value='friday'>Friday</option>
-                    <option value='saturday'>Saturday</option>
-                    <option value='sunday'>Sunday</option> -->
-                    <option value=1>Monday</option>
-                    <option value=2>Tuesday</option>
-                    <option value=3>Wednesday</option>
-                    <option value=4>Thursday</option>
-                    <option value=5>Friday</option>
-                    <option value=6>Saturday</option>
-                    <option value=7>Sunday</option>
-                </select>
-                <br> <br>
-                <label for='Time-of-day'>Time: </label>
-                <select id='time' name='time'>
-                    <option value='none' selected disabled>Select an Option</option>
-                    <!-- <option value='00'>12am</option>
-                    <option value='01'>1am</option>
-                    <option value='02'>2am</option>
-                    <option value='03'>3am</option>
-                    <option value='04'>4am</option>
-                    <option value='05'>5am</option>
-                    <option value='06'>6am</option>
-                    <option value='07'>7am</option>
-                    <option value='08'>8am</option>
-                    <option value='09'>9am</option>
-                    <option value='10'>10am</option>
-                    <option value='11'>11am</option>
-                    <option value='12'>12pm</option>
-                    <option value='13'>1pm</option>
-                    <option value='14'>2pm</option>
-                    <option value='15'>3pm</option>
-                    <option value='16'>4pm</option>
-                    <option value='17'>5pm</option>
-                    <option value='18'>6pm</option>
-                    <option value='19'>7pm</option>
-                    <option value='20'>8pm</option>
-                    <option value='21'>9pm</option>
-                    <option value='22'>10pm</option>
-                    <option value='23'>11pm</option> -->
-                    <option value=1>12am</option>
-                    <option value=2>1am</option>
-                    <option value=3>2am</option>
-                    <option value=3>3am</option>
-                    <option value=4>4am</option>
-                    <option value=5>5am</option>
-                    <option value=6>6am</option>
-                    <option value=7>7am</option>
-                    <option value=8>8am</option>
-                    <option value=9>9am</option>
-                    <option value=10>10am</option>
-                    <option value=11>11am</option>
-                    <option value=12>12pm</option>
-                    <option value=13>1pm</option>
-                    <option value=14>2pm</option>
-                    <option value=15>3pm</option>
-                    <option value=16>4pm</option>
-                    <option value=17>5pm</option>
-                    <option value=18>6pm</option>
-                    <option value=19>7pm</option>
-                    <option value=20>8pm</option>
-                    <option value=21>9pm</option>
-                    <option value=22>10pm</option>
-                    <option value=23>11pm</option>
-                    <option value=-1>All Day</option>
-                </select>
-                <br><br>
-                <label for='tdtask'>Task to-do: </label>
-                <input id='task' type='text' name='task' required>
-                <br /> <br />
-                <label for='note'>Note: </label>
-                <input id='note' type='text' name='note'>
-                <br><br>
-                <input type='submit' value='Submit'>
-                
-            </fieldset>
-                
-            </form>
-        </div>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#000000" />
+    <meta
+      name="description"
+      content="html file for the todolist app."
+    />
+    <link rel="stylesheet" href="index.css">
+    <!-- <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css"> -->
+    <script src="index.js"></script>
 
+
+    <title>To Do List</title>
+  </head>
+  <body>
+    <h1>To-Do List</h1>
+    <h3>Tasks without a due date:</h3>
+    <div id="undueTasks"></div>
+
+    <h3> Tasks with a due date:</h3>
+    <div id='dueTasks'></div>
+    <div id='add-item'>
+      <form action='/addTask' method='POST'>
+      <fieldset>
+          <legend>Add to your to-do list</legend>
+          <label for='Day-of-the-week'>Due date</label>
+          <input type="date" name="dueDate" id="datepicker">
+          <br> <br>
+          <label for='To-Do-Time'>Time: </label>
+          <input type="time" id="timepicker" name="dueTime">
+          <br><br>
+          <label for='tdtask'>Task to-do: </label>
+          <input id='task' type='text' name='taskName' required>
+          <br /> <br />
+          <label for='note'>Note: </label>
+          <input id='note' type='text' name='note'>
+          <br><br>
+          <input type='submit' value='Submit'>
+          
+      </fieldset>
+          
+      </form>
     </div>
-
-    <script>
-        const GET_LIST_URL = 'getTask/';
-        const COMPLETE_TASK_URL = 'complete/';
-
-        // window.addEventListener("load", init);
-        
-        // function init() {
-        //     document.getElementById('monday').addEventListener('click', clickFunction);
-        //     console.log('initialized')
-        // }
-        
-        // for (child in id('day-list').childNodes) {
-        //     console.log(child)
-        //     //child.addEventListener('click', clickFunction);
-        // }
-        id('monday').addEventListener('click', clickFunction);
-        id('tuesday').addEventListener('click', clickFunction);
-        id('wednesday').addEventListener('click', clickFunction);
-        id('thursday').addEventListener('click', clickFunction);
-        id('friday').addEventListener('click', clickFunction);
-        id('saturday').addEventListener('click', clickFunction);
-        id('sunday').addEventListener('click', clickFunction);
-        id('all_week').addEventListener('click', clickFunction);
-
-        
-        // function(this) {
-        //     removeCurrentList();
-        //     console.log('clicked');
-        //     getToDoList();
-        // });
-        
-        async function wait(el) {
-            await new Promise(resolve => setTimeout(resolve, 0));
-            return el;
-        }
-        
-        function clickFunction() {
-            removeCurrentList();
-            // wait(this).then(getToDoList);
-            getToDoList(this);
-            
-        }
-
-        function deleteTask() {
-            
-        }
-
-        function completeTask() {
-            let url = COMPLETE_TASK_URL; // + this.closest('li').id;
-            // console.log(JSON.stringify({ 'taskID': this.closest('li').id }));
-            // console.log(this.closest('li').id);
-            fetch(url, {
-                method: 'POST',
-                headers: { 'Content-Type' : 'application/json'},
-                body: JSON.stringify({ "taskId": this.closest('li').id })
-            })
-            .catch(console.err);
-            
-        }
-
-        function getToDoList(el) {
-            //let url = GET_LIST_URL + el.textContent; // if no params needed in request url
-            let url = GET_LIST_URL + el.value;
-            fetch(url)
-            .then(checkStatus)
-            .then(JSON.parse)
-            .then( (res) => {
-                // console.log(res);
-                const tdlist = document.createElement('ul');
-                for (task of res) {
-                    const taskBox = document.createElement('li');
-                    const name = document.createElement('div');
-                    const note = document.createElement('div');
-                    const dButton = document.createElement('button')
-                    const cButton = document.createElement('button');
-                    taskBox.classList.add('card');
-                    taskBox.id = task.taskId;
-                    name.textContent = task.taskName;
-                    note.textContent = 'Note: ' + task.note;
-                    note.classList.add('note');
-                    if (task.complete) {
-                        taskBox.classList.add('completed');
-                    }
-                    dButton.textContent = 'Delete Task';
-                    cButton.textContent = 'Mark As Complete';
-                    dButton.classList.add('taskButton');
-                    cButton.classList.add('taskButton');
-                    dButton.addEventListener('click', deleteTask);
-                    cButton.addEventListener('click', completeTask);
-                    taskBox.appendChild(name);
-                    taskBox.appendChild(note);
-                    taskBox.appendChild(cButton);
-                    taskBox.appendChild(dButton);
-                    tdlist.appendChild(taskBox);
-                }
-                // let tdlist = document.createElement('p');
-                // tdlist.textContent = res;
-                id('to-do-list').appendChild(tdlist);
-            })
-            .catch(console.log);
-            
-        }
-
-        function removeCurrentList() {
-            while(id('to-do-list').firstChild) {
-                id('to-do-list').removeChild(id('to-do-list').firstChild);
-            }
-
-        }
-        
-// Helper functions.
-        function id(name) {
-            return document.getElementById(name);
-        }
-
-        function checkStatus(response) {
-            if (response.status >= 200 && response.status < 300 || response.status == 0) {
-            return response.text();
-            } else {
-            return Promise.reject(new Error(response.status + ": " + response.statusText));
-            }
-        }
-    </script>
-</body>
-    
+    <!-- <script src="https://unpkg.com/react@17/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js" crossorigin></script>
+    <script src= "reactList.js"></script> -->
+  </body>
 </html>

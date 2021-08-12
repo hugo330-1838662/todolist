@@ -1,31 +1,30 @@
 {
-  "name": "todolist",
+  "name": "react-koa",
   "version": "1.0.0",
   "description": "",
-  "main": "tdlist.js",
+  "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon src/index.js"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/hugo330-1838662/todolist.git"
-  },
+  "keywords": [],
   "author": "",
   "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/hugo330-1838662/todolist/issues"
-  },
-  "homepage": "https://github.com/hugo330-1838662/todolist#readme",
   "dependencies": {
     "@koa/router": "^10.1.0",
+    "create-react-app": "^1.5.2",
+    "http": "^0.0.1-security",
+    "http-status": "^1.5.0",
     "koa-body": "^4.2.0",
-    "koa-ejs": "^4.3.0",
+    "koa-bodyparser": "^4.3.0",
+    "koa-cors": "^0.0.16",
+    "koa-logger": "^3.2.1",
+    "koa-mount": "^4.0.0",
+    "koa-router": "^10.0.0",
     "koa-static": "^5.0.0",
-    "mysql2": "^2.2.5",
+    "mysql2": "^2.3.0",
+    "nodemon": "^2.0.12",
     "path": "^0.12.7",
     "sequelize": "^6.6.5"
-  },
-  "scripts": {
-    "start": "nodemon server/index.js"
   }
 }
