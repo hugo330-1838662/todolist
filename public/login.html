@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#000000" />
+    <meta
+      name="description"
+      content="login page for to do list"
+    />
+    <link rel="stylesheet" href="index.css">
+    <script src="login.js"></script>
+
+
+    <title>Please login - To Do List</title>
+  </head>
+  <body>
+    <div id='login-box'>
+      <form action='/login' method='POST'>
+      <fieldset>
+          <legend>User Login</legend>
+          <label for='loginId'>User ID:</label>
+          <input type="text" name="loginId">
+          <br> <br>
+          <label for='userPwd'>Password: </label>
+          <input type="password" name="password">
+          <br><br>
+          <input type='submit' value='Submit' id='submit-button'>
+          
+      </fieldset>
+          
+      </form>
+    </div>
+    <!-- <script src="https://unpkg.com/react@17/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js" crossorigin></script>
+    <script src= "reactCom.js"></script> -->
+  </body>
+</html>

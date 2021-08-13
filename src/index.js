@@ -36,9 +36,13 @@ app.on('error', (err, ctx) => {
     console.error('Internal server error', err, ctx);
 });
 
-router.get('index', '/', (ctx) => {
-    ctx.redirect('/index.html');
-});
+// router.get('index', '/', async (ctx) => {
+//     ctx.redirect('index.html');
+// });
+
+router.get('index', '/login', async (ctx) => {
+    ctx.redirect('login.html')
+})
 
 // router.get('singleDayTask', '/single-day/:day', async (ctx) => {
 //     // ctx.body = 'To-do list for ' + ctx.params.day + '.';
@@ -79,15 +83,10 @@ router.post('addTask', '/addTask', async (ctx) => {
 });
 
 router.post('toggleComplete', '/toggle-complete', async (ctx) => {
-    // ctx.body = await Task.update(
-    //     { complete: 1 }, 
-    //     { where: { id: ctx.request.body.taskId } }
-    // );
     ctx.body = await Task.update(
         { complete: Sequelize.literal('NOT complete') }, 
         { where: { id: ctx.request.body.taskId } }
     );
-    // ctx.redirect('/');
 });
 
 router.delete('deleteTask', '/delete/:id', async (ctx) => {
@@ -95,11 +94,12 @@ router.delete('deleteTask', '/delete/:id', async (ctx) => {
         where: {
             id: ctx.params.id
         }
-    })
-
-    // ctx.redirect('/');
-    
+    })    
 });
+
+router.post('userLogin', '/login', async (ctx) => {
+
+})
 
 app
     .use(serve(staticDirPath))

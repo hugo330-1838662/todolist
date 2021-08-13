@@ -9,16 +9,56 @@ const DELETE_TASK_URL = 'delete/';
 window.addEventListener("load", init);
 
 function init() {
+    console.log(document.cookie);
+    if (getCookie('userid') == '') {
+        id('login-button').textContent = 'login';
+        id('login-button').addEventListener('click', userLogin);
+    } else {
+        id('username').textContent = getCookie('username');
+        id('login-button').textContent = 'logout';
+        id('login-button').removeEventListener('click', userLogin);
+    }
     getToDoList();
-    // id('monday').addEventListener('click', clickFunction);
-    // id('tuesday').addEventListener('click', clickFunction);
-    // id('wednesday').addEventListener('click', clickFunction);
-    // id('thursday').addEventListener('click', clickFunction);
-    // id('friday').addEventListener('click', clickFunction);
-    // id('saturday').addEventListener('click', clickFunction);
-    // id('sunday').addEventListener('click', clickFunction);
-    // id('all_week').addEventListener('click', clickFunction);
 }
+
+function userLogin() {
+    console.log('user login');
+}
+
+function setCookie(cname, cvalue) {
+    const d = new Date();
+    d.setTime(d.getTime() + (exdays*24*60*60*1000));
+    let expires = "expires="+ d.toUTCString();
+    document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+}
+
+function getCookie(cname) {
+    let name = cname + "=";
+    let decodedCookie = decodeURIComponent(document.cookie);
+    let ca = decodedCookie.split(';');
+    for(let i = 0; i <ca.length; i++) {
+        let c = ca[i];
+        while (c.charAt(0) == ' ') {
+            c = c.substring(1);
+        }
+        if (c.indexOf(name) == 0) {
+            return c.substring(name.length, c.length);
+        }
+    }
+    return "";
+}
+
+// function checkCookie() {
+//     let username = getCookie("username");
+//     if (username != "") {
+//         alert("Welcome again " + username);
+//     } else {
+//         username = prompt("Please enter your name:", "");
+//         if (username != "" && username != null) {
+//             setCookie("username", username, 365);
+//         }
+//     }
+// }
 
 function deleteTask() {
     let url = DELETE_TASK_URL + this.closest('li').id;
@@ -84,7 +124,7 @@ function getToDoList() {
             name.textContent = 'Task Name: ' + task.taskName;
             note.textContent = task.note? 'Note: ' + task.note : '';
             date.textContent = task.dueDate? 'Due date: ' + task.dueDate : 'No due date';
-            time.textContent = task.dueTime? 'Due time: ' + task.dueTime : 'No due tiem';
+            time.textContent = task.dueTime? 'Due time: ' + task.dueTime : 'No due time';
             
             dButton.textContent = 'Delete Task';
             cButton.textContent = task.complete? 'Mark as Incomplete' : 'Mark As Complete';

@@ -57,3 +57,19 @@ ul {
 #submit-button {
     font-family: monospace;
 }
+
+#nav-bar, #account-info-box {
+    display: inline-flex;
+    align-items: center;
+}
+
+#nav-bar {
+    width: 100%;
+    align-items: center;
+    justify-content: space-between;
+}
+
+#login-button {
+    width: 90px;
+    height: 30px;
+}
