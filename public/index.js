@@ -5,11 +5,14 @@
 const GET_LIST_URL = 'getTask/';
 const COMPLETE_TASK_URL = 'toggle-complete/';
 const DELETE_TASK_URL = 'delete/';
+const LOGIN_URL = 'login/'
 
 window.addEventListener("load", init);
 
 function init() {
-    console.log(document.cookie);
+    console.log('Current cookie', document.cookie);
+    id('tdlist').classList.remove('hidden');
+        id('login-box').classList.add('hidden');
     if (getCookie('userid') == '') {
         id('login-button').textContent = 'login';
         id('login-button').addEventListener('click', userLogin);
@@ -18,47 +21,31 @@ function init() {
         id('login-button').textContent = 'logout';
         id('login-button').removeEventListener('click', userLogin);
     }
-    getToDoList();
+
+
+    // if (getCookie('userid') == '') {
+    //     // id('login-button').textContent = 'login';
+    //     // id('login-button').addEventListener('click', userLogin);
+    //     id('tdlist').classList.add('hidden');
+    //     id('login-box').classList.remove('hidden');
+    // } else {
+    //     id('tdlist').classList.remove('hidden');
+    //     id('login-box').classList.add('hidden');
+    //     // id('username').textContent = getCookie('username');
+    //     // id('login-button').textContent = 'logout';
+    //     // id('login-button').removeEventListener('click', userLogin);
+    // }
+    // id('login-button').addEventListener('click', userLogin);
+    // id('tdlist').classList.remove('hidden');
+    // id('login-box').classList.add('hidden');
+    // getToDoList();
 }
 
 function userLogin() {
     console.log('user login');
+    window.location.assign('/login');
 }
 
-function setCookie(cname, cvalue) {
-    const d = new Date();
-    d.setTime(d.getTime() + (exdays*24*60*60*1000));
-    let expires = "expires="+ d.toUTCString();
-    document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
-}
-
-function getCookie(cname) {
-    let name = cname + "=";
-    let decodedCookie = decodeURIComponent(document.cookie);
-    let ca = decodedCookie.split(';');
-    for(let i = 0; i <ca.length; i++) {
-        let c = ca[i];
-        while (c.charAt(0) == ' ') {
-            c = c.substring(1);
-        }
-        if (c.indexOf(name) == 0) {
-            return c.substring(name.length, c.length);
-        }
-    }
-    return "";
-}
-
-// function checkCookie() {
-//     let username = getCookie("username");
-//     if (username != "") {
-//         alert("Welcome again " + username);
-//     } else {
-//         username = prompt("Please enter your name:", "");
-//         if (username != "" && username != null) {
-//             setCookie("username", username, 365);
-//         }
-//     }
-// }
 
 function deleteTask() {
     let url = DELETE_TASK_URL + this.closest('li').id;
@@ -92,7 +79,7 @@ function toggleCompleteTask() {
     
 }
 
-function getToDoList() {
+function getToDoList(userId) {
     //let url = GET_LIST_URL + el.textContent; // if no params needed in request url
     fetch(GET_LIST_URL)
     .then(checkStatus)
@@ -169,3 +156,38 @@ function checkStatus(response) {
     return Promise.reject(new Error(response.status + ": " + response.statusText));
     }
 }
+
+function setCookie(cname, cvalue) {
+    const d = new Date();
+    d.setTime(d.getTime() + (exdays*24*60*60*1000));
+    let expires = "expires="+ d.toUTCString();
+    document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+}
+
+function getCookie(cname) {
+    let name = cname + "=";
+    let decodedCookie = decodeURIComponent(document.cookie);
+    let ca = decodedCookie.split(';');
+    for(let i = 0; i <ca.length; i++) {
+        let c = ca[i];
+        while (c.charAt(0) == ' ') {
+            c = c.substring(1);
+        }
+        if (c.indexOf(name) == 0) {
+            return c.substring(name.length, c.length);
+        }
+    }
+    return "";
+}
+
+// function checkCookie() {
+//     let username = getCookie("username");
+//     if (username != "") {
+//         alert("Welcome again " + username);
+//     } else {
+//         username = prompt("Please enter your name:", "");
+//         if (username != "" && username != null) {
+//             setCookie("username", username, 365);
+//         }
+//     }
+// }

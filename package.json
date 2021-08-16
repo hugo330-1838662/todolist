@@ -12,7 +12,8 @@
   "license": "ISC",
   "dependencies": {
     "@koa/router": "^10.1.0",
-    "create-react-app": "^1.5.2",
+    "create-react-app": "^1.2.1",
+    "fs": "^0.0.1-security",
     "http": "^0.0.1-security",
     "http-status": "^1.5.0",
     "koa-body": "^4.2.0",

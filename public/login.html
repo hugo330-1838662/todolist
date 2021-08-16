@@ -17,18 +17,34 @@
   <body>
     <div id='login-box'>
       <form action='/login' method='POST'>
-      <fieldset>
-          <legend>User Login</legend>
-          <label for='loginId'>User ID:</label>
-          <input type="text" name="loginId">
-          <br> <br>
-          <label for='userPwd'>Password: </label>
-          <input type="password" name="password">
-          <br><br>
-          <input type='submit' value='Submit' id='submit-button'>
-          
-      </fieldset>
-          
+        <fieldset>
+            <legend>User Login</legend>
+            <label for='loginId'>User ID:</label>
+            <input type="text" name="loginId">
+            <br> <br>
+            <label for='userPwd'>Password: </label>
+            <input type="password" name="password">
+            <br><br>
+            <input type='submit' value='Submit' id='submit-button'>
+        </fieldset>
+      </form>
+    </div>
+
+    <div id='create-user-box'>
+      <form action='/create-user' method='POST'>
+        <fieldset>
+            <legend>Create User</legend>
+            <label for="name">Your name:</label>
+            <input type="text" name="name">
+            <br> <br>
+            <label for="loginId">User ID:</label>
+            <input type="text" name="loginId">
+            <br> <br>
+            <label for='userPwd'>Password: </label>
+            <input type="password" name="password">
+            <br><br>
+            <input type='submit' value='Create User' id='create-user-button'>
+        </fieldset>
       </form>
     </div>
     <!-- <script src="https://unpkg.com/react@17/umd/react.development.js" crossorigin></script>

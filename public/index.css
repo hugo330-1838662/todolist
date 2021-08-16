@@ -54,10 +54,6 @@ ul {
     margin: 5px;
 }
 
-#submit-button {
-    font-family: monospace;
-}
-
 #nav-bar, #account-info-box {
     display: inline-flex;
     align-items: center;
@@ -68,8 +64,12 @@ ul {
     align-items: center;
     justify-content: space-between;
 }
-
+/* 
 #login-button {
     width: 90px;
     height: 30px;
+} */
+
+.hidden {
+    display: none;
 }

@@ -5,6 +5,7 @@ const PORT = process.env.PORT || 3010;
 
 const Koa = require('koa');
 const Router = require('@koa/router');
+const FS = require('fs');
 
 const http = require('http');
 const path = require('path');
@@ -40,9 +41,9 @@ app.on('error', (err, ctx) => {
 //     ctx.redirect('index.html');
 // });
 
-router.get('index', '/login', async (ctx) => {
-    ctx.redirect('login.html')
-})
+// router.get('login', '/login', async (ctx) => {
+//     ctx.redirect('/login.html')
+// })
 
 // router.get('singleDayTask', '/single-day/:day', async (ctx) => {
 //     // ctx.body = 'To-do list for ' + ctx.params.day + '.';
@@ -98,8 +99,23 @@ router.delete('deleteTask', '/delete/:id', async (ctx) => {
 });
 
 router.post('userLogin', '/login', async (ctx) => {
+    const bdy = ctx.request.body;
+    console.log(bdy);
+    ctx.redirect('/');
+});
 
+router.get('userLogin', '/login', async (ctx) => {
+    // ctx.redirect('/login.html');
+    ctx.type = 'html';
+    ctx.body = FS.createReadStream(path.join(staticDirPath, 'login.html'));
 })
+
+router.post('createUser', '/login/create', async (ctx) => {
+    const bdy = ctx.request.body;
+    console.log(bdy);
+    ctx.body = await User.create(bdy);
+    ctx.redirect('/login');
+});
 
 app
     .use(serve(staticDirPath))
@@ -122,7 +138,7 @@ app
         // await Task.sync({alter: true});
         await sequelize.sync({ alter: true });
         
-        console.log('The tables for Users, Tasks, and Weekdays have been (re)created.');
+        console.log('The tables for Users and Tasks have been (re)created.');
     } catch (err) {
         console.error(err.message);
     }
