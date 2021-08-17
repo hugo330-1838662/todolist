@@ -1,92 +1,113 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#000000" />
-    <meta
-      name="description"
-      content="html file for the todolist app."
-    />
-    <link rel="stylesheet" href="index.css">
-    <!-- <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css"> -->
-    <script src="index.js"></script>
-    <title>To Do List</title>
-  </head>
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#000000" />
+  <meta name="description" content="html file for the todolist app." />
+  <link rel="stylesheet" href="index.css">
+  <!-- <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css"> -->
+  <script src="index.js"></script>
+  <title>To Do List</title>
+</head>
 
 
-  <body>
-    <div id="nav-bar">
-      <h1>To-Do List</h1>
-      <div id="account-info-box">
-        <h2>Welcome: </h2>
-        <div id="username"></div>
-        <button id="login-button"></button>
-      </div>
+<body>
+  <div id="nav-bar">
+    <h1>To-Do List</h1>
+    <div id="account-info-box">
+      <h2>Welcome: </h2>
+      <h2 id="username"></h2>
+      <button id="login-button">Login</button>
+      <button id="logout-button">Logout</button>
+
     </div>
-
-    <div id='login-box'>
-      <p>Please login...</p>
-      <form action='/login' method='POST'>
+  </div>
+  <div id='login-box'>
+    <p>Please login...</p>
+    <form action='/login' method='POST'>
       <fieldset>
-          <legend>User Login</legend>
-          <label for='loginId'>User ID:</label>
-          <input type="text" name="loginId">
-          <br> <br>
-          <label for='userPwd'>Password: </label>
-          <input type="password" name="password">
-          <br><br>
-          <input type='submit' value='Login' id='login-button'>
+        <legend>User Login</legend>
+        <label for='loginId'>User ID:</label>
+        <input type="text" name="loginId">
+        <br> <br>
+        <label for='userPwd'>Password: </label>
+        <input type="password" name="password">
+        <br><br>
+        <input type='submit' value='Login' id='login-button'>
       </fieldset>
-      </form>
-      <p>Or create new user...</p>
-      <form action='/create-user' method='POST'>
-        <fieldset>
-            <legend>Create User</legend>
-            <label for="name">Your name:</label>
-            <input type="text" name="name">
-            <br> <br>
-            <label for="loginId">User ID:</label>
-            <input type="text" name="loginId">
-            <br> <br>
-            <label for='userPwd'>Password: </label>
-            <input type="password" name="password">
-            <br><br>
-            <input type='submit' value='Create User' id='create-user-button'>
-        </fieldset>
-      </form>
-    </div>
+    </form>
+    <p>Or create new user...</p>
+    <form action='/create-user' method='POST'>
+      <fieldset>
+        <legend>Create User</legend>
+        <label for="name">Your name:</label>
+        <input type="text" name="name">
+        <br> <br>
+        <label for="loginId">User ID:</label>
+        <input type="text" name="loginId">
+        <br> <br>
+        <label for='userPwd'>Password: </label>
+        <input type="password" name="password">
+        <br><br>
+        <input type='submit' value='Create User' id='create-user-button'>
+      </fieldset>
+    </form>
+  </div>
 
-    <div id="tdlist">
-      <h3>Tasks without a due date:</h3>
-      <div id="undueTasks"></div>
+  <div id="tdlist">
+    <h3>Tasks without a due date:</h3>
+    <div id="undueTasks"></div>
 
-      <h3> Tasks with a due date:</h3>
-      <div id='dueTasks'></div>
-      <!-- <div id='react-com'></div> -->
-      <div id='add-item'>
-        <form action='/addTask' method='POST'>
-          <fieldset>
-              <legend>Add to your to-do list</legend>
-              <label for='Day-of-the-week'>Due date</label>
-              <input type="date" name="dueDate" id="datepicker">
-              <br> <br>
-              <label for='To-Do-Time'>Time: </label>
-              <input type="time" id="timepicker" name="dueTime">
-              <br><br>
-              <label for='tdtask'>Task to-do: </label>
-              <input id='task' type='text' name='taskName' required>
-              <br /> <br />
-              <label for='note'>Note: </label>
-              <input id='note' type='text' name='note'>
-              <br><br>
-              <input type='submit' value='Submit' id='submit-button'>
-          </fieldset>
-        </form>
-      </div>
-    </div>
-    <!-- <script src="https://unpkg.com/react@17/umd/react.development.js" crossorigin></script>
+    <h3> Tasks with a due date:</h3>
+    <div id='dueTasks'></div>
+    <!-- <div id='react-com'></div> -->
+  </div>
+  <div id='add-item'>
+    <form id='add-task-form' action='/addTask' method='POST'>
+      <fieldset>
+        <legend>Add to your to-do list</legend>
+        <label for='Day-of-the-week'>Due date</label>
+        <input type="date" name="dueDate" id="datepicker">
+        <br> <br>
+        <label for='To-Do-Time'>Time: </label>
+        <input type="time" id="timepicker" name="dueTime">
+        <br><br>
+        <label for='tdtask'>Task to-do: </label>
+        <input id='task' type='text' name='taskName' required>
+        <br /> <br />
+        <label for='note'>Note: </label>
+        <input id='note' type='text' name='note'>
+        <br><br>
+        <input type='submit' value='Submit' id='submit-button'>
+      </fieldset>
+    </form>
+  </div>
+  <!-- <div id='add-item'>
+    <form id='add-task-form' action='/addTask' method='POST'>
+      <fieldset>
+        <legend>Add to your to-do list</legend>
+        <label for='Day-of-the-week'>Due date</label>
+        <input type="date" name="dueDate" id="datepicker">
+        <br> <br>
+        <label for='To-Do-Time'>Time: </label>
+        <input type="time" id="timepicker" name="dueTime">
+        <br><br>
+        <label for='tdtask'>Task to-do: </label>
+        <input id='task' type='text' name='taskName' required>
+        <br /> <br />
+        <label for='note'>Note: </label>
+        <input id='note' type='text' name='note'>
+        <br><br>
+        <input type='submit' value='Submit' id='submit-button'>
+      </fieldset>
+    </form>
+  </div> -->
+
+  <!-- <script src="https://unpkg.com/react@17/umd/react.development.js" crossorigin></script>
     <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js" crossorigin></script>
     <script src= "reactCom.js"></script> -->
-  </body>
+</body>
+
 </html>

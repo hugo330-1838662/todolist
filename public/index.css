@@ -73,3 +73,7 @@ ul {
 .hidden {
     display: none;
 }
+
+#username {
+    color: rgb(72, 147, 201);
+}

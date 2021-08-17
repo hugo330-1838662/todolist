@@ -1,9 +1,9 @@
 'use strict'
 
 module.exports = (sequelize, DataTypes) => {
-    return sequelize.define('User', {    
+    return sequelize.define('User', {
         id: {
-            type: DataTypes.INTEGER, 
+            type: DataTypes.INTEGER,
             allowNull: false,
             primaryKey: true,
             autoIncrement: true
@@ -11,7 +11,7 @@ module.exports = (sequelize, DataTypes) => {
         name: {
             type: DataTypes.STRING,
             allowNull: false
-        }, 
+        },
         loginId: {
             type: DataTypes.STRING,
             allowNull: false,
@@ -22,9 +22,15 @@ module.exports = (sequelize, DataTypes) => {
             allowNull: false
         }
     }, {
-        timestamps: true, 
+        timestamps: true,
         createdAt: false,
         raw: true
         // other options
     })
+
+    // user.validate = () => {
+    //     return 1;
+    // };
+
+    // return user;
 };
