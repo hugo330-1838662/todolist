@@ -1,27 +1,10 @@
 'use strict';
 
-const GET_SESSION_INFO_URL = 'get-session-status/'
-
-window.addEventListener("load", init);
-
-
-async function init() {
-    // console.log('current cookie >>>>> ', document.cookie);
-    const user = await fetch(GET_SESSION_INFO_URL)
-        .then(checkStatus)
-        .then(JSON.parse)
-        .catch(console.err);
-    // console.log('Current session >>>>> ', user);
-    id('message-box').textContent = user.message || '';
-}
-
-
-// helper
-function id(name) {
+export function id(name) {
     return document.getElementById(name);
 }
 
-function checkStatus(response) {
+export function checkStatus(response) {
     if (response.status >= 200 && response.status < 300 || response.status == 0) {
         return response.text();
     } else {
@@ -29,14 +12,14 @@ function checkStatus(response) {
     }
 }
 
-function setCookie(cname, cvalue) {
+export function setCookie(cname, cvalue) {
     const d = new Date();
     d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
     let expires = "expires=" + d.toUTCString();
     document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
 }
 
-function getCookie(cname) {
+export function getCookie(cname) {
     let name = cname + "=";
     let decodedCookie = decodeURIComponent(document.cookie);
     let ca = decodedCookie.split(';');

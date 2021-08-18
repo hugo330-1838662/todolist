@@ -5,38 +5,31 @@
 const GET_LIST_URL = 'getTask/';
 const COMPLETE_TASK_URL = 'toggle-complete/';
 const DELETE_TASK_URL = 'delete/';
-const LOGIN_URL = 'login/'
-const USER_INFO_URL = 'get-session-status/'
+const LOGIN_URL = 'login/';
+const GET_SESSION_INFO_URL = 'get-session-status/';
 
 window.addEventListener("load", init);
 
+// async function getUserName() {
+//     return await fetch(GET_USER_NAME_URL).catch(console.err);
+// }
+
 async function init() {
-    console.log('current cookie >>>>> ', document.cookie);
-    const user = await fetch(USER_INFO_URL)
+    // console.log('current cookie >>>>> ', document.cookie);
+    const sess = await fetch(GET_SESSION_INFO_URL)
         .then(checkStatus)
         .then(JSON.parse)
         .catch(console.err);
-    console.log('current user >>>>>', user);
-    id('username').textContent = user.name || 'You are not logged in.';
-    if (user.id) {
-        id('login-button').classList.add('hidden');
-        id('logout-button').classList.remove('hidden');
-        id('add-item').classList.remove('hidden');
-        const input = document.createElement('input');
-        input.setAttribute('name', 'UserId');
-        input.setAttribute('value', user.id);
-        input.setAttribute('type', 'hidden');
-        id('add-task-form').appendChild(input);
-
-        getToDoList(user.id);
+    console.log('current user >>>>>', sess);
+    id('username').textContent = sess.name || 'You are not logged in.';
+    if (sess.name) {
+        hide(id('login-button'));
+        show([id('logout-button'), id('add-item')]);
+        getToDoList();
     } else {
-        id('login-button').classList.remove('hidden');
-        id('logout-button').classList.add('hidden');
-        id('add-item').classList.add('hidden');
+        hide([id('logout-button'), id('add-item')]);
+        show(id('login-button'));
     }
-    // id('tdlist').classList.remove('hidden');
-
-    // console.log('<%= Session["name"] %>');
 
     id('login-button').addEventListener('click', () => {
         window.location.assign('/login');
@@ -44,39 +37,21 @@ async function init() {
     id('logout-button').addEventListener('click', () => {
         window.location.assign('/logout');
     });
-
-    // if (getCookie('userid') == '') {
-    //     id('login-button').textContent = 'login';
-    //     id('login-button').addEventListener('click', () => {
-    //         window.location.assign('/login');
-    //     });
-    // } else {
-    //     id('username').textContent = getCookie('username');
-    //     id('login-button').textContent = 'logout';
-    //     id('login-button').removeEventListener('click', () => {
-    //         window.location.assign('/logout');
-    //     });
-
-    // }
-    // if (getCookie('userid') == '') {
-    //     // id('login-button').textContent = 'login';
-    //     // id('login-button').addEventListener('click', userLogin);
-    //     id('tdlist').classList.add('hidden');
-    //     id('login-box').classList.remove('hidden');
-    // } else {
-    //     id('tdlist').classList.remove('hidden');
-    //     id('login-box').classList.add('hidden');
-    //     // id('username').textContent = getCookie('username');
-    //     // id('login-button').textContent = 'logout';
-    //     // id('login-button').removeEventListener('click', userLogin);
-    // }
-    // id('login-button').addEventListener('click', userLogin);
-    // id('tdlist').classList.remove('hidden');
-    // id('login-box').classList.add('hidden');
-    // getToDoList();
 }
 
+function show(el) {
+    el = [].concat(el);
+    for (const e of el) {
+        e.classList.remove('hidden');
+    }
+}
 
+function hide(el) {
+    el = [].concat(el);
+    for (const e of el) {
+        e.classList.add('hidden');
+    }
+}
 
 function deleteTask() {
     let url = DELETE_TASK_URL + this.closest('li').id;
@@ -86,8 +61,8 @@ function deleteTask() {
     })
         .then(checkStatus)
         .then(() => {
-            window.location.reload();
-            return false;
+            return window.location.reload();
+            // return false;
         })
         .catch(console.err);
 }
@@ -103,15 +78,15 @@ function toggleCompleteTask() {
     })
         .then(checkStatus)
         .then(() => {
-            window.location.reload();
-            return false;
+            return window.location.reload();
+            // return false;
         })
         .catch(console.err);
 
 }
 
-function getToDoList(userId) {
-    let url = GET_LIST_URL + userId;
+function getToDoList() {
+    let url = GET_LIST_URL;
     fetch(url)
         .then(checkStatus)
         .then(JSON.parse)
@@ -165,13 +140,6 @@ function getToDoList(userId) {
             id('undueTasks').appendChild(undueTasks);
         })
         .catch(console.log);
-
-}
-
-function removeCurrentList() {
-    while (id('to-do-list').firstChild) {
-        id('to-do-list').removeChild(id('to-do-list').firstChild);
-    }
 
 }
 

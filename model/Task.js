@@ -9,9 +9,9 @@ module.exports = (sequelize, DataTypes) => {
             autoIncrement: true
         },
         taskName: {
-            type: DataTypes.STRING(25), 
+            type: DataTypes.STRING(25),
             allowNull: false
-        }, 
+        },
         dueDate: {
             type: DataTypes.DATEONLY,
             allowNull: true
@@ -28,9 +28,17 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.BOOLEAN,
             allowNull: false,
             defaultValue: false
-        }
+        },
+        userId: {
+            type: DataTypes.INTEGER,
+            references: {
+                model: 'Users',
+                key: 'id'
+            },
+            allowNull: false
+        },
     }, {
-        timestamps: false, 
+        timestamps: false,
         raw: true
         // other options
     })
