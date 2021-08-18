@@ -38,7 +38,7 @@ const Task = require(path.join(modelDirPath, 'Task.js'))(sequelize, DataTypes);
 // app.keys = ['secret_tdlist'];
 
 const CONFIG = {
-    key: 'tdl.sess', /** (string) cookie key (default is koa.sess) */
+    key: 'tdl.loggedIn', /** (string) cookie key (default is koa.sess) */
     /** (number || 'session') maxAge in ms (default is 1 days) */
     /** 'session' will result in a cookie that expires when session/browser is closed */
     /** Warning: If a session cookie is stolen, this cookie will never expire */
@@ -108,6 +108,8 @@ router.get('getTask', '/getTask/:id', async (ctx) => {
 });
 
 router.get('getSessionStatus', '/get-session-status', async (ctx) => {
+    console.log('session status >>>> ', ctx.session);
+    console.log('cookies status >>>> ', ctx.cookies.get(CONFIG.key));
     ctx.body = ctx.session;
 })
 
@@ -158,11 +160,15 @@ router.post('userLogin', '/login', async (ctx) => {
         if (user.password == bdy.password) {
             ctx.session.name = user.name;
             ctx.session.id = user.id;
+            ctx.cookies.set('name', user.name);
+            ctx.cookies.set('id', user.id);
             ctx.session.message = 'Successfully logged in as: ' + user.name;
             ctx.redirect('/');
         } else {
             ctx.session.name = null;
             ctx.session.id = null;
+            ctx.cookies.set('name', '');
+            ctx.cookies.set('id', '');
             ctx.session.message = 'Wrong username/password combination.';
             ctx.redirect('/login');
         }

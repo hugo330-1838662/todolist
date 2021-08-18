@@ -34,8 +34,7 @@ async function init() {
         id('logout-button').classList.add('hidden');
         id('add-item').classList.add('hidden');
     }
-    id('tdlist').classList.remove('hidden');
-    id('login-box').classList.add('hidden');
+    // id('tdlist').classList.remove('hidden');
 
     // console.log('<%= Session["name"] %>');
 
