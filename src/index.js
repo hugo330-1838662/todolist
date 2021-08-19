@@ -31,12 +31,12 @@ const modelDirPath = path.join(ROOT_PATH, 'model/');
 // import models
 const User = require(path.join(modelDirPath, 'User.js'))(sequelize, DataTypes);
 const Task = require(path.join(modelDirPath, 'Task.js'))(sequelize, DataTypes);
-const Token = require(path.join(modelDirPath, 'Token.js'))(sequelize, DataTypes);
+// const Token = require(path.join(modelDirPath, 'Token.js'))(sequelize, DataTypes);
 // const Weekday = require(path.join(modelDirPath, 'Weekday.js'))(sequelize, DataTypes);
 
 // config for cookie in koa-session.
 
-// app.keys = ['secret_tdlist'];
+app.keys = ['secret_tdlist'];
 
 const CONFIG = {
     key: 'tdl.sess', /** (string) cookie key (default is koa.sess) */
@@ -47,7 +47,7 @@ const CONFIG = {
     autoCommit: true, /** (boolean) automatically commit headers (default true) */
     overwrite: true, /** (boolean) can overwrite or not (default true) */
     httpOnly: false, /** (boolean) httpOnly or not (default true) */
-    signed: false, /** (boolean) signed or not (default true) */
+    signed: true, /** (boolean) signed or not (default true) */
     rolling: false, /** (boolean) Force a session identifier cookie to be set on every response. 
         The expiration is reset to the original maxAge, resetting the expiration countdown. (default is false) */
     renew: false, /** (boolean) renew session when session is nearly expired, so we can always keep user logged in. (default is false)*/
@@ -176,7 +176,6 @@ router.post('userLogin', '/login', async (ctx) => {
         ctx.session.message = 'User doesn\'t exist.';
         ctx.redirect('/login');
     }
-
     console.log('session>>>>>', ctx.session);
 });
 
@@ -194,7 +193,7 @@ router.post('createUser', '/create-user', async (ctx) => {
         ctx.redirect('login');
     } else {
         ctx.body = await User.create(bdy);
-        ctx.session.message = 'Sucessfully created user ' + bdy.loginId + '. Please login';
+        ctx.session.message = 'Sucessfully created user ' + bdy.loginId + '. Please login.';
         ctx.redirect('/login');
     }
 });
@@ -207,3 +206,15 @@ router.delete('deleteTask', '/delete/:id', async (ctx) => {
     })
 });
 
+
+
+// eyJtZXNzYWdlIjoiU3VjY2Vzc2Z1bGx5IGxvZ2dlZCBpbiBhczogSHVnbyIsIm5hbWUiOiJIdWdvIiwiaWQiOjEsIl9leHBpcmUiOjE2MjkzNDA5NTcwNTMsIl9tYXhBZ2UiOjMwMDAwMH0=
+// eyJtZXNzYWdlIjoiU3VjY2Vzc2Z1bGx5IGxvZ2dlZCBpbiBhczogSHVnbyIsIm5hbWUiOiJIdWdvIiwiaWQiOjEsIl9leHBpcmUiOjE2MjkzNDEyNDQ5OTksIl9tYXhBZ2UiOjMwMDAwMH0=
+// eyJtZXNzYWdlIjoiVXNlciBkb2Vzbid0IGV4aXN0LiIsIl9leHBpcmUiOjE2MjkzNDEyMTM0NjIsIl9tYXhBZ2UiOjMwMDAwMH0=
+// eyJuYW1lIjoiSHVnbyIsImlkIjoxLCJtZXNzYWdlIjoiU3VjY2Vzc2Z1bGx5IGxvZ2dlZCBpbiBhczogSHVnbyIsIl9leHBpcmUiOjE2MjkzNDExMjA2NDMsIl9tYXhBZ2UiOjMwMDAwMH0=
+// eyJuYW1lIjoiSHVnbyIsImlkIjoxLCJtZXNzYWdlIjoiU3VjY2Vzc2Z1bGx5IGxvZ2dlZCBpbiBhczogSHVnbyIsIl9leHBpcmUiOjE2MjkzNDA3NjE5OTgsIl9tYXhBZ2UiOjMwMDAwMH0=
+// eyJuYW1lIjoiSHVnbyIsImlkIjoxLCJtZXNzYWdlIjoiU3VjY2Vzc2Z1bGx5IGxvZ2dlZCBpbiBhczogSHVnbyIsIl9leHBpcmUiOjE2MjkzNDA3NjE5OTgsIl9tYXhBZ2UiOjMwMDAwMH0=
+// eyJuYW1lIjoiSHVnbyIsImlkIjoxLCJtZXNzYWdlIjoiU3VjY2Vzc2Z1bGx5IGxvZ2dlZCBpbiBhczogSHVnbyIsIl9leHBpcmUiOjE2MjkzNDY1MDM3OTYsIl9tYXhBZ2UiOjMwMDAwMH0=
+// eyJuYW1lIjoiSGVkeSIsImlkIjoyLCJtZXNzYWdlIjoiU3VjY2Vzc2Z1bGx5IGxvZ2dlZCBpbiBhczogSGVkeSIsIl9leHBpcmUiOjE2MjkzNDE4NTgzMzQsIl9tYXhBZ2UiOjMwMDAwMH0=
+// eyJuYW1lIjoiSHVnbyIsImlkIjoxLCJtZXNzYWdlIjoiU3VjY2Vzc2Z1bGx5IGxvZ2dlZCBpbiBhczogSHVnbyIsIl9leHBpcmUiOjE2MjkzNDY3OTUyODQsIl9tYXhBZ2UiOjMwMDAwMH0=
+// eyJuYW1lIjoiSHVnbyIsImlkIjoxLCJtZXNzYWdlIjoiU3VjY2Vzc2Z1bGx5IGxvZ2dlZCBpbiBhczogSHVnbyIsIl9leHBpcmUiOjE2MjkzNDY3NTU0MzksIl9tYXhBZ2UiOjMwMDAwMH0=
