@@ -17,7 +17,7 @@ const app = new Koa();
 const router = new Router();
 
 // database tools
-const { Sequelize, Model, Op, DataTypes } = require('sequelize');
+const { Sequelize, Model, Op, DataTypes, DatabaseError } = require('sequelize');
 const sequelize = new Sequelize('to-do-list', 'root', 'liaojunxihugo330', {
     dialect: 'mysql',
     logging: false
@@ -43,11 +43,11 @@ const CONFIG = {
     /** (number || 'session') maxAge in ms (default is 1 days) */
     /** 'session' will result in a cookie that expires when session/browser is closed */
     /** Warning: If a session cookie is stolen, this cookie will never expire */
-    maxAge: 300000, // <-- five minute // 86400000, // <-- default
+    maxAge: 60000, //300000, // <-- five minute // 86400000, // <-- default
     autoCommit: true, /** (boolean) automatically commit headers (default true) */
     overwrite: true, /** (boolean) can overwrite or not (default true) */
     httpOnly: false, /** (boolean) httpOnly or not (default true) */
-    signed: true, /** (boolean) signed or not (default true) */
+    signed: false, /** (boolean) signed or not (default true) */
     rolling: false, /** (boolean) Force a session identifier cookie to be set on every response. 
         The expiration is reset to the original maxAge, resetting the expiration countdown. (default is false) */
     renew: false, /** (boolean) renew session when session is nearly expired, so we can always keep user logged in. (default is false)*/
@@ -77,7 +77,8 @@ app
     }
 
     try {
-        await sequelize.sync({ alter: true });
+        // await sequelize.sync({ alter: true });
+        await sequelize.sync();
         console.log('The tables for Users, Tokens and Tasks have been (re)created.');
     } catch (err) {
         console.error(err.message);
@@ -128,26 +129,148 @@ router.get('userLogout', '/logout', async (ctx) => {
 });
 
 router.post('addTask', '/addTask', async (ctx) => {
-    const bdy = ctx.request.body;
-    if (bdy.dueDate == '') {
-        bdy.dueDate = null;
-        bdy.dueTime = null;
+    if (ctx.session.id) {
+        const bdy = ctx.request.body;
+        if (bdy.dueDate == '') {
+            bdy.dueDate = null;
+            bdy.dueTime = null;
+        }
+        if (bdy.dueTime == '') {
+            bdy.dueTime = null;
+        }
+        bdy.userId = ctx.session.id;
+        ctx.body = await Task.create(bdy);
+        ctx.redirect('/');
     }
-    if (bdy.dueTime == '') {
-        bdy.dueTime = null;
-    }
-    bdy.userId = ctx.session.id;
-    ctx.body = await Task.create(bdy);
-    ctx.redirect('/');
 });
 
 router.post('toggleComplete', '/toggle-complete', async (ctx) => {
-    ctx.body = await Task.update(
-        { complete: Sequelize.literal('NOT complete') },
-        { where: { id: ctx.request.body.taskId } }
-    );
+    console.log('Session userId >>>> ', ctx.session.id);
+    if (ctx.session.id) {
+        ctx.body = await Task.update({
+            complete: Sequelize.literal('NOT complete')
+        }, {
+            where: { id: ctx.request.body.taskId }
+        });
+    }
     ctx.redirect('/');
 });
+
+router.post('bulkTest', '/bulk-test', async (ctx) => {
+    // const n = 10;
+    // const m = 100000;
+    const arr = new Array(parseInt(ctx.request.body.n));
+    let bulk = [];
+    for (let i = 0; i < ctx.request.body.m; i++) {
+        const newTask = {
+            taskName: 'bulk' + i,
+            note: 'test.',
+            userId: 3
+        };
+        bulk.push(newTask);
+    };
+
+    // 串行
+    let start = new Date();
+    console.log('串行: Start >>>>', start.toLocaleTimeString());
+    for (let i = 0; i < ctx.request.body.n; i++) {
+        for (let j = 0; j < bulk.length; j++) {
+            bulk[j].taskName = '串行bulk' + i + j + parseInt((Math.random() * 10));
+        }
+        await Task.bulkCreate(bulk);
+    }
+    let end = new Date();
+    console.log('End >>>>', end.toLocaleTimeString());
+    console.log('diff >>>>', end - start);
+    // ctx.body = end - start;
+
+
+    // 并行
+    for (let i = 0; i < arr.length; i++) {
+        for (let j = 0; j < bulk.length; j++) {
+            const name = '并行bulk' + i + j + parseInt((Math.random() * 10));
+            // console.log(name);
+            bulk[j].taskName = name; //'并行bulk' + i + j + parseInt((Math.random() * 10));
+        }
+        arr[i] = bulk;
+    }
+    const tasks = arr.map(bulk => Task.bulkCreate(bulk));
+    start = new Date();
+    console.log('并行: Start >>>>', start.toLocaleTimeString());
+    await Promise.all(tasks);
+    end = new Date();
+    console.log('End >>>>', end.toLocaleTimeString());
+    console.log('diff >>>>', end - start);
+    ctx.body = end - start;
+});
+
+router.post('bulkInsert', '/bulk-create', async (ctx) => {
+    console.log('Init >>>>> ', new Date().toLocaleTimeString());
+    let bulk = [];
+    for (let i = 0; i < ctx.request.body.size; i++) {
+        const newTask = {
+            taskName: 'bulk' + i,
+            note: 'test.',
+            userId: 3
+        };
+        bulk.push(newTask);
+    };
+    const start = new Date();
+    console.log('start >>>>', start.toLocaleTimeString());
+    await Task.bulkCreate(bulk);
+    const end = new Date();
+    console.log('End >>>>', end.toLocaleTimeString());
+    console.log('diff >>>>', end - start);
+    ctx.body = end - start;
+});
+
+router.post('individualInsert', '/indiv-create', async (ctx) => {
+    const start = new Date();
+    console.log('Start >>>>> ', start.toLocaleTimeString());
+    for (let i = 0; i < ctx.request.body.size; i++) {
+        const newTask = {
+            taskName: 'individual' + i,
+            note: 'test.',
+            userId: 3
+        };
+        await Task.create(newTask);
+    };
+    const end = new Date();
+    console.log('End >>>>', end.toLocaleTimeString());
+    console.log('diff >>>>', end - start);
+    ctx.body = end - start;
+});
+
+router.post('bulkUpdate', '/bulk-update', async (ctx) => {
+    let bulk = [...Array(parseInt(ctx.request.body.size)).keys()]
+    const start = new Date();
+    console.log('start >>>>', start.toLocaleTimeString());
+    await Task.update({
+        complete: Sequelize.literal('NOT complete')
+    }, {
+        where: { id: bulk }
+    });
+    const end = new Date();
+    console.log('End >>>>', end.toLocaleTimeString());
+    console.log('diff >>>>', end - start);
+    ctx.body = end - start;
+});
+
+router.post('individualUpdate', '/indiv-update', async (ctx) => {
+    const start = new Date();
+    console.log('Start >>>>> ', start.toLocaleTimeString());
+    for (let i = 0; i < ctx.request.body.size; i++) {
+        await Task.update({
+            complete: Sequelize.literal('NOT complete')
+        }, {
+            where: { id: i }
+        });
+    };
+    const end = new Date();
+    console.log('End >>>>', end.toLocaleTimeString());
+    console.log('diff >>>>', end - start);
+    ctx.body = end - start;
+})
 
 router.post('userLogin', '/login', async (ctx) => {
     const bdy = ctx.request.body;
@@ -199,22 +322,13 @@ router.post('createUser', '/create-user', async (ctx) => {
 });
 
 router.delete('deleteTask', '/delete/:id', async (ctx) => {
-    ctx.body = await Task.destroy({
-        where: {
-            id: ctx.params.id
-        }
-    })
+    if (ctx.session.id) {
+        ctx.body = await Task.destroy({
+            where: {
+                id: ctx.params.id
+            }
+        })
+    }
 });
 
 
-
-// eyJtZXNzYWdlIjoiU3VjY2Vzc2Z1bGx5IGxvZ2dlZCBpbiBhczogSHVnbyIsIm5hbWUiOiJIdWdvIiwiaWQiOjEsIl9leHBpcmUiOjE2MjkzNDA5NTcwNTMsIl9tYXhBZ2UiOjMwMDAwMH0=
-// eyJtZXNzYWdlIjoiU3VjY2Vzc2Z1bGx5IGxvZ2dlZCBpbiBhczogSHVnbyIsIm5hbWUiOiJIdWdvIiwiaWQiOjEsIl9leHBpcmUiOjE2MjkzNDEyNDQ5OTksIl9tYXhBZ2UiOjMwMDAwMH0=
-// eyJtZXNzYWdlIjoiVXNlciBkb2Vzbid0IGV4aXN0LiIsIl9leHBpcmUiOjE2MjkzNDEyMTM0NjIsIl9tYXhBZ2UiOjMwMDAwMH0=
-// eyJuYW1lIjoiSHVnbyIsImlkIjoxLCJtZXNzYWdlIjoiU3VjY2Vzc2Z1bGx5IGxvZ2dlZCBpbiBhczogSHVnbyIsIl9leHBpcmUiOjE2MjkzNDExMjA2NDMsIl9tYXhBZ2UiOjMwMDAwMH0=
-// eyJuYW1lIjoiSHVnbyIsImlkIjoxLCJtZXNzYWdlIjoiU3VjY2Vzc2Z1bGx5IGxvZ2dlZCBpbiBhczogSHVnbyIsIl9leHBpcmUiOjE2MjkzNDA3NjE5OTgsIl9tYXhBZ2UiOjMwMDAwMH0=
-// eyJuYW1lIjoiSHVnbyIsImlkIjoxLCJtZXNzYWdlIjoiU3VjY2Vzc2Z1bGx5IGxvZ2dlZCBpbiBhczogSHVnbyIsIl9leHBpcmUiOjE2MjkzNDA3NjE5OTgsIl9tYXhBZ2UiOjMwMDAwMH0=
-// eyJuYW1lIjoiSHVnbyIsImlkIjoxLCJtZXNzYWdlIjoiU3VjY2Vzc2Z1bGx5IGxvZ2dlZCBpbiBhczogSHVnbyIsIl9leHBpcmUiOjE2MjkzNDY1MDM3OTYsIl9tYXhBZ2UiOjMwMDAwMH0=
-// eyJuYW1lIjoiSGVkeSIsImlkIjoyLCJtZXNzYWdlIjoiU3VjY2Vzc2Z1bGx5IGxvZ2dlZCBpbiBhczogSGVkeSIsIl9leHBpcmUiOjE2MjkzNDE4NTgzMzQsIl9tYXhBZ2UiOjMwMDAwMH0=
-// eyJuYW1lIjoiSHVnbyIsImlkIjoxLCJtZXNzYWdlIjoiU3VjY2Vzc2Z1bGx5IGxvZ2dlZCBpbiBhczogSHVnbyIsIl9leHBpcmUiOjE2MjkzNDY3OTUyODQsIl9tYXhBZ2UiOjMwMDAwMH0=
-// eyJuYW1lIjoiSHVnbyIsImlkIjoxLCJtZXNzYWdlIjoiU3VjY2Vzc2Z1bGx5IGxvZ2dlZCBpbiBhczogSHVnbyIsIl9leHBpcmUiOjE2MjkzNDY3NTU0MzksIl9tYXhBZ2UiOjMwMDAwMH0=

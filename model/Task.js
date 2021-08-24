@@ -10,7 +10,7 @@ module.exports = (sequelize, DataTypes) => {
         },
         taskName: {
             type: DataTypes.STRING(25),
-            allowNull: false
+            allowNull: false,
         },
         dueDate: {
             type: DataTypes.DATEONLY,
